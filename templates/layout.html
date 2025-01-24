@@ -2,10 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Book Mela{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
-<body>
-    
+<body class="text-gray-900 flex flex-col min-h-screen bg-white">
+    <!-- Navbar -->
+    <nav class="bg-blue-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="{{ url_for('home') }}" class="text-2xl font-bold">Book Mela</a>
+                <form action="{{ url_for('search') }}" method="GET" class="hidden md:flex items-center ml-6">
+                    <input type="text" name="q" placeholder="Search..." class="px-4 py-2 rounded bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <button type="submit" class="ml-2 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 active:bg-yellow-700 disabled:bg-gray-400">Search</button>
+                </form>
+            </div>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="{{ url_for('home') }}" class="{% if request.path == url_for('home') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Home</a></li>
+                <li><a href="{{ url_for('categories') }}" class="{% if request.path == url_for('categories') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Categories</a></li>
+                <li><a href="{{ url_for('upload') }}" class="{% if request.path == url_for('upload') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Upload</a></li>
+                <li><a href="{{ url_for('about') }}" class="{% if request.path == url_for('about') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">About Us</a></li>
+                <li><a href="{{ url_for('login') }}" class="{% if request.path == url_for('login') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Login/Signup</a></li>
+            </ul>
+            <button class="md:hidden text-yellow-500" id="menu-button">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="menu" class="hidden md:hidden bg-blue-900">
+            <a href="{{ url_for('home') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Home</a>
+            <a href="{{ url_for('categories') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Categories</a>
+            <a href="{{ url_for('upload') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Upload</a>
+            <a href="{{ url_for('about') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">About Us</a>
+            <a href="{{ url_for('login') }}" class="block px-4 py-2 text-white bg-blue-800 hover:bg-yellow-600 rounded-lg">Login/Signup</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow bg-blue-100">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-800 mt-auto">
+        <div class="max-w-6xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-white">
+                &copy; 2025 Book Mela. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('menu-button').addEventListener('click', function() {
+            var menu = document.getElementById('menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>
