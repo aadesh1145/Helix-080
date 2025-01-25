@@ -1,12 +1,105 @@
 {% extends "layout.html" %}
 
-{% block title %}Upload - Book Mela{% endblock %}
+{% block title %}Upload Item - Book Mela{% endblock %}
 
 {% block content %}
-<section class="bg-white py-8">
+<div class="bg-white py-8">
     <div class="container mx-auto px-4">
-        <h1 class="text-4xl font-bold text-gray-800">Upload</h1>
-        <p class="text-gray-600 mt-4">Upload your used books, notes, PDFs, and utensils.</p>
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Upload Item</h1>
+        <form action="{{ url_for('upload_item') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+                    Title
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter the title of the item"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description
+                </label>
+                <textarea
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="description"
+                    name="description"
+                    placeholder="Enter a description of the item"
+                    required
+                ></textarea>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+                    Price
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="number"
+                    id="price"
+                    name="price"
+                    placeholder="Enter the price of the item"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+                    Category
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="category"
+                    name="category"
+                    required
+                >
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="SEE">SEE</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                    <option value="bachelor">Bachelor's</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="faculty">
+                    Faculty
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="faculty"
+                    name="faculty"
+                    required
+                >
+                    <option value="Science">Science</option>
+                    <option value="Math">Math</option>
+                    <option value="English">English</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Arts">Arts</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
+                    Image
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="file"
+                    id="image"
+                    name="image"
+                    required
+                />
+            </div>
+            <button
+                type="submit"
+                class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+                Upload Item
+            </button>
+        </form>
     </div>
-</section>
+</div>
 {% endblock %}
