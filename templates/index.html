@@ -40,10 +40,12 @@
     </div>
 
     <!-- Call to Action Section -->
-    <div class="text-center">
-        <h2 class="text-3xl font-bold text-blue-900 mb-4">Join Our Community</h2>
-        <p class="text-lg text-gray-700 mb-6">Sign up today and start sharing your favorite books with others.</p>
-        <a href="{{ url_for('signup') }}" class="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600">Sign Up</a>
-    </div>
+        <div class="text-center">
+        {% if 'user_id' not in session %}
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">Join Our Community</h2>
+            <p class="text-lg text-gray-700 mb-6">Sign up today and start sharing your favorite books with others.</p>
+            <a href="{{ url_for('signup') }}" class="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600">Sign Up</a>
+        {% endif %}
+    </div>>
 </div>
 {% endblock %}
