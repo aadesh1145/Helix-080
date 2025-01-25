@@ -30,6 +30,19 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
+# Item Model
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    author = db.Column(db.String(100))
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    level = db.Column(db.String(50), nullable=False)
+    faculty = db.Column(db.String(100))
+    price = db.Column(db.Float, nullable=False)
+    file_path = db.Column(db.String(200), nullable=False)
+
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -87,27 +100,27 @@ def signup():
         
     return render_template('signup.html')
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
         
         user = User.query.filter_by(email=email).first()
-        
+
         if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id  # Store user id in session
+            session['user_id'] = user.id
+            session['fullname'] = user.fullname
             flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Invalid email or password. Please try again.', 'error')
-            return render_template("login.html")
-            
-    return render_template("login.html")
+            flash('Invalid email or password', 'error')
+
+    return render_template('login.html')
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)  # Remove user id from session
+    session.clear()
     flash('You have been logged out', 'success')
     return redirect(url_for('home'))
 
@@ -115,9 +128,41 @@ def logout():
 def home():
     return render_template('index.html')
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
+    if request.method == 'POST':
+        title = request.form['title']
+        author = request.form.get('author')
+        description = request.form['description']
+        category = request.form['category']
+        status = request.form['status']
+        level = request.form['level']
+        faculty = request.form.get('faculty')
+        price = request.form['price']
+        file = request.files['file']
+
+        # Save the file
+        file_path = os.path.join('static/uploads', file.filename)
+        file.save(file_path)
+
+        # Create a new item
+        item = Item(
+            title=title,
+            author=author,
+            description=description,
+            category=category,
+            status=status,
+            level=level,
+            faculty=faculty,
+            price=price,
+            file_path=file_path
+        )
+        db.session.add(item)
+        db.session.commit()
+        flash('Item uploaded successfully!', 'success')
+        return redirect(url_for('home'))
+
     return render_template('upload.html')
 
 @app.route('/profile')
