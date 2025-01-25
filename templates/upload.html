@@ -98,7 +98,7 @@
                     <option value="">Select a level</option>
                     <option value="8">Class 8</option>
                     <option value="9">Class 9</option>
-                    <option value="10">Class 10</option>
+                    <option value="10">class 10/ SEE</option>
                     <option value="11">Class 11</option>
                     <option value="12">Class 12</option>
                     <option value="bachelor">Bachelor's</option>
@@ -250,19 +250,19 @@
 </div>
 
 <script>
-    document.getElementById('level').addEventListener('change', function() {
-        var facultySection11_12 = document.getElementById('faculty-section-11-12');
-        var facultySectionBachelor = document.getElementById('faculty-section-bachelor');
-        if (this.value === '11' || this.value === '12') {
-            facultySection11_12.classList.remove('hidden');
-            facultySectionBachelor.classList.add('hidden');
-        } else if (this.value === 'bachelor') {
-            facultySection11_12.classList.add('hidden');
-            facultySectionBachelor.classList.remove('hidden');
-        } else {
-            facultySection11_12.classList.add('hidden');
-            facultySectionBachelor.classList.add('hidden');
-        }
+document.getElementById('level').addEventListener('change', function() {
+    var facultySection11_12 = document.getElementById('faculty-section-11-12');
+    var facultySectionBachelor = document.getElementById('faculty-section-bachelor');
+    if (this.value === '11' || this.value === '12') {
+        facultySection11_12.classList.remove('hidden');
+        facultySectionBachelor.classList.add('hidden');
+    } else if (this.value === 'bachelor') {
+        facultySection11_12.classList.add('hidden');
+        facultySectionBachelor.classList.remove('hidden');
+    } else {
+        facultySection11_12.classList.add('hidden');
+        facultySectionBachelor.classList.add('hidden');
+    }
     });
 </script>
 {% endblock %}

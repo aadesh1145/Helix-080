@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ class_name|capitalize }} {{ faculty|capitalize }} Items - Book Mela{% endblock %}
+
+{% block content %}
+<section class="bg-white py-8">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">
+            {% if faculty %}
+                {{ faculty|capitalize }} - 
+            {% endif %}
+            {% if class_name == 'bachelor' %}
+                Bachelor's Items
+            {% else %}
+                Class {{ class_name|capitalize }} Items
+            {% endif %}
+        </h1>
+
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex space-x-4">
+                <label for="sort" class="sr-only">Sort by</label>
+                <select id="sort" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    <option value="title">Sort by Title</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="status">Status</option>
+                    <option value="category">Category</option>
+                </select>
+                <label for="filter-category" class="sr-only">Filter by Category</label>
+                <select id="filter-category" name="filter-category" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+                    <option value="all">All Categories</option>
+                    <option value="books">Books</option>
+                    <option value="notes">Notes</option>
+                    <option value="instruments">Other Instruments</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+            <div class="text-gray-600">
+                {{ items|length }} items found
+            </div>
+        </div>
+
+        <div id="items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for item in items %}
+                <div class="item-card bg-white border rounded-lg shadow-lg p-4 transform transition hover:scale-105" 
+                     data-title="{{ item.title }}" 
+                     data-price="{{ item.price }}" 
+                     data-status="{{ item.status }}" 
+                     data-category="{{ item.category }}">
+                    
+                    <div class="relative">
+                        <img src="{{ url_for('static', filename='uploads/' ~ item.file_path) }}" 
+                             alt="{{ item.title }}" 
+                             class="w-full h-64 object-cover rounded-t-lg" 
+                             onerror="this.src='/static/default-book.png'">
+                        
+                        {% if item.status != 'sold' %}
+                        <span class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-sm">
+                            Available
+                        </span>
+                        {% else %}
+                        <span class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-sm">
+                            Sold
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">{{ item.title }}</h3>
+                        
+                        <div class="space-y-2 mb-4">
+                            {% if item.author %}
+                            <p><strong>Author:</strong> {{ item.author }}</p>
+                            {% endif %}
+                            <p><strong>Price:</strong> ₹{{ "{:.2f}".format(item.price) }}</p>
+                            <p><strong>Status:</strong> 
+                                {% if item.status == 'new' %}
+                                    <span class="text-green-600">New</span>
+                                {% elif item.status == 'fairly_used' %}
+                                    <span class="text-yellow-600">Fairly Used</span>
+                                {% else %}
+                                    <span class="text-red-600">Old</span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between items-center">
+                            <a href="{{ url_for('item_details', item_id=item.id) }}" 
+                               class="text-blue-500 hover:underline">
+                                View Details
+                            </a>
+                            
+                            {% if item.status != 'sold' and session.get('user_id') %}
+                            <form action="{{ url_for('buy_item', item_id=item.id) }}" method="POST" class="inline">
+                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                    Buy Now
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sortSelect = document.getElementById('sort');
+    const categoryFilter = document.getElementById('filter-category');
+    const itemsGrid = document.getElementById('items-grid');
+    const noItemsMessage = document.getElementById('no-items');
+    const itemCards = document.querySelectorAll('.item-card');
+
+    function sortAndFilterItems() {
+        const sortValue = sortSelect.value;
+        const categoryValue = categoryFilter.value;
+        
+        // Convert NodeList to Array for sorting
+        const sortedItems = Array.from(itemCards);
+
+        // Sort items
+        switch(sortValue) {
+            case 'title':
+                sortedItems.sort((a, b) => a.dataset.title.localeCompare(b.dataset.title));
+                break;
+            case 'price-low':
+                sortedItems.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
+                break;
+            case 'price-high':
+                sortedItems.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
+                break;
+        }
+
+        // Filter and display items
+        let visibleItemCount = 0;
+        sortedItems.forEach(item => {
+            const isMatchingCategory = categoryValue === 'all' || item.dataset.category === categoryValue;
+            
+            if (isMatchingCategory) {
+                item.style.display = 'block';
+                visibleItemCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Toggle no items message
+        noItemsMessage.classList.toggle('hidden', visibleItemCount > 0);
+
+        // Re-append sorted and filtered items
+        sortedItems.forEach(item => itemsGrid.appendChild(item));
+    }
+
+    sortSelect.addEventListener('change', sortAndFilterItems);
+    categoryFilter.addEventListener('change', sortAndFilterItems);
+});
+</script>
+{% endblock %}
