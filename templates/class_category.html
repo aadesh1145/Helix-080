@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ class_name }} - Book Mela{% endblock %}
+
+{% block content %}
+<section class="bg-white py-8">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">class {{ class_name }}</h1>
+        <p class="text-gray-600 mb-12">Select a faculty to browse items.</p>
+
+        <!-- Faculty Categories -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for faculty in faculties %}
+            <a href="{{ url_for('faculty_category', class_name=class_name, faculty=faculty) }}" class="bg-blue-100 p-6 rounded-lg shadow-lg text-center hover:bg-blue-200">
+                <h3 class="text-xl font-bold text-gray-800">{{ faculty }}</h3>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
