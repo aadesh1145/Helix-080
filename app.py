@@ -114,6 +114,13 @@ def home():
 def upload():
     return render_template('upload.html')
 
+@app.route('/profile')
+@login_required
+def profile():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    return render_template('profile.html', user=user)
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
