@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 
-{% block title %}Upload Item - Book Mela{% endblock %}
-
 {% block content %}
 <div class="bg-white py-8">
     <div class="container mx-auto px-4">
@@ -9,7 +7,7 @@
         <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
-                    Title
+                    Title <span class="text-red-500">*</span>
                 </label>
                 <input
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -18,11 +16,25 @@
                     name="title"
                     placeholder="Enter the title of the item"
                     required
+                    oninvalid="this.setCustomValidity('Please fill out this field.')"
+                    oninput="this.setCustomValidity('')"
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="author">
+                    Author (optional)
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="author"
+                    name="author"
+                    placeholder="Enter the author's name"
                 />
             </div>
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-                    Description
+                    Description <span class="text-red-500">*</span>
                 </label>
                 <textarea
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -30,11 +42,175 @@
                     name="description"
                     placeholder="Enter a description of the item"
                     required
+                    oninvalid="this.setCustomValidity('Please fill out this field.')"
+                    oninput="this.setCustomValidity('')"
                 ></textarea>
             </div>
             <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+                    Category <span class="text-red-500">*</span>
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="category"
+                    name="category"
+                    required
+                    oninvalid="this.setCustomValidity('Please select a category.')"
+                    oninput="this.setCustomValidity('')"
+                >
+                    <option value="">Select a category</option>
+                    <option value="books">Books</option>
+                    <option value="notes">Notes</option>
+                    <option value="instruments">Other Instruments</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+                    Status <span class="text-red-500">*</span>
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="status"
+                    name="status"
+                    required
+                    oninvalid="this.setCustomValidity('Please select a status.')"
+                    oninput="this.setCustomValidity('')"
+                >
+                    <option value="">Select a status</option>
+                    <option value="new">New</option>
+                    <option value="fairly_used">Fairly Used</option>
+                    <option value="old">Old</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="level">
+                    Level <span class="text-red-500">*</span>
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="level"
+                    name="level"
+                    required
+                    oninvalid="this.setCustomValidity('Please select a level.')"
+                    oninput="this.setCustomValidity('')"
+                >
+                    <option value="">Select a level</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                    <option value="bachelor">Bachelor's</option>
+                </select>
+            </div>
+            <div id="faculty-section-11-12" class="hidden">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="faculty-11-12">
+                    Faculty <span class="text-red-500">*</span>
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="faculty-11-12"
+                    name="faculty-11-12"
+                    oninvalid="this.setCustomValidity('Please select a faculty.')"
+                    oninput="this.setCustomValidity('')"
+                >
+                    <option value="">Select a faculty</option>
+                    <option value="Science">Science</option>
+                    <option value="Management">Management</option>
+                    <option value="Humanities">Humanities</option>
+                    <option value="Education">Education</option>
+                    <option value="Law">Law</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Technical and Vocational Streams">Technical and Vocational Streams</option>
+                </select>
+            </div>
+            <div id="faculty-section-bachelor" class="hidden">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="faculty-bachelor">
+                    Faculty <span class="text-red-500">*</span>
+                </label>
+                <select
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="faculty-bachelor"
+                    name="faculty-bachelor"
+                    oninvalid="this.setCustomValidity('Please select a faculty.')"
+                    oninput="this.setCustomValidity('')"
+                >
+                    <option value="">Select a faculty</option>
+                    <optgroup label="Management and Commerce">
+                        <option value="BBA">BBA (Bachelor of Business Administration)</option>
+                        <option value="BBS">BBS (Bachelor of Business Studies)</option>
+                        <option value="BBM">BBM (Bachelor of Business Management)</option>
+                        <option value="BHM">BHM (Bachelor of Hotel Management)</option>
+                        <option value="BTTM">BTTM (Bachelor of Travel and Tourism Management)</option>
+                    </optgroup>
+                    <optgroup label="Science and Technology">
+                        <option value="B.Sc.">B.Sc. (General – Physics, Chemistry, Biology, Mathematics)</option>
+                        <option value="BIT">BIT (Bachelor of Information Technology)</option>
+                        <option value="B.Sc. CSIT">B.Sc. CSIT (Computer Science and Information Technology)</option>
+                        <option value="BCA">BCA (Bachelor of Computer Application)</option>
+                    </optgroup>
+                    <optgroup label="Engineering">
+                        <option value="BE">BE (Bachelor of Engineering – Civil, Electrical, Mechanical, Electronics, etc.)</option>
+                        <option value="B.Arch.">B.Arch. (Bachelor of Architecture)</option>
+                    </optgroup>
+                    <optgroup label="Medical and Health Sciences">
+                        <option value="MBBS">MBBS (Bachelor of Medicine and Surgery)</option>
+                        <option value="BDS">BDS (Bachelor of Dental Surgery)</option>
+                        <option value="B.Sc. Nursing">B.Sc. Nursing</option>
+                        <option value="BPH">BPH (Bachelor of Public Health)</option>
+                        <option value="BAMS">BAMS (Ayurvedic Medicine and Surgery)</option>
+                    </optgroup>
+                    <optgroup label="Humanities and Social Sciences">
+                        <option value="BA">BA (Bachelor of Arts – Sociology, English, Psychology, etc.)</option>
+                        <option value="B.Ed.">B.Ed. (Bachelor of Education)</option>
+                    </optgroup>
+                    <optgroup label="Agriculture and Veterinary Sciences">
+                        <option value="B.Sc. Agriculture">B.Sc. Agriculture</option>
+                        <option value="BVSc & AH">BVSc & AH (Veterinary Science and Animal Husbandry)</option>
+                    </optgroup>
+                    <optgroup label="Law">
+                        <option value="LLB">LLB (Bachelor of Laws)</option>
+                    </optgroup>
+                    <optgroup label="Fine Arts and Media">
+                        <option value="BFA">BFA (Bachelor of Fine Arts)</option>
+                        <option value="BJMC">BJMC (Bachelor of Journalism and Mass Communication)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="contact_no">
+                    Contact No. <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="contact_no"
+                    name="contact_no"
+                    placeholder="Enter your contact number"
+                    required
+                    oninvalid="this.setCustomValidity('Please fill out this field.')"
+                    oninput="this.setCustomValidity('')"
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                    Email <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    oninvalid="this.setCustomValidity('Please fill out this field.')"
+                    oninput="this.setCustomValidity('')"
+                />
+            </div>
+            <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-                    Price
+                    Price <span class="text-red-500">*</span>
                 </label>
                 <input
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -43,63 +219,50 @@
                     name="price"
                     placeholder="Enter the price of the item"
                     required
+                    oninvalid="this.setCustomValidity('Please fill out this field.')"
+                    oninput="this.setCustomValidity('')"
                 />
             </div>
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
-                    Category
-                </label>
-                <select
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                    id="category"
-                    name="category"
-                    required
-                >
-                    <option value="8">Class 8</option>
-                    <option value="9">Class 9</option>
-                    <option value="SEE">SEE</option>
-                    <option value="11">Class 11</option>
-                    <option value="12">Class 12</option>
-                    <option value="bachelor">Bachelor's</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="faculty">
-                    Faculty
-                </label>
-                <select
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                    id="faculty"
-                    name="faculty"
-                    required
-                >
-                    <option value="Science">Science</option>
-                    <option value="Math">Math</option>
-                    <option value="English">English</option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Arts">Arts</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
-                    Image
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="file">
+                    Upload File <span class="text-red-500">*</span>
                 </label>
                 <input
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                     type="file"
-                    id="image"
-                    name="image"
+                    id="file"
+                    name="file"
                     required
+                    oninvalid="this.setCustomValidity('Please upload a file.')"
+                    oninput="this.setCustomValidity('')"
                 />
             </div>
-            <button
-                type="submit"
-                class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-            >
-                Upload Item
-            </button>
+            <div>
+                <button
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                    type="submit"
+                >
+                    Upload
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('level').addEventListener('change', function() {
+        var facultySection11_12 = document.getElementById('faculty-section-11-12');
+        var facultySectionBachelor = document.getElementById('faculty-section-bachelor');
+        if (this.value === '11' || this.value === '12') {
+            facultySection11_12.classList.remove('hidden');
+            facultySectionBachelor.classList.add('hidden');
+        } else if (this.value === 'bachelor') {
+            facultySection11_12.classList.add('hidden');
+            facultySectionBachelor.classList.remove('hidden');
+        } else {
+            facultySection11_12.classList.add('hidden');
+            facultySectionBachelor.classList.add('hidden');
+        }
+    });
+</script>
 {% endblock %}
