@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename  # Add this import
 from functools import wraps
 import os
 
@@ -9,6 +10,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -136,38 +138,57 @@ def home():
 @login_required
 def upload():
     if request.method == 'POST':
-        title = request.form['title']
-        author = request.form.get('author')
-        description = request.form['description']
-        category = request.form['category']
-        status = request.form['status']
-        level = request.form['level']
-        faculty = request.form.get('faculty')
-        price = request.form['price']
-        contact_no = request.form['contact_no']
-        email = request.form['email']
-        file = request.files['file']
-
-        # Save the file
-        file_path = os.path.join('static/uploads', file.filename)
-        file.save(file_path)
-
-        # Create a new item
-        item = Item(
-            title=title,
-            author=author,
-            description=description,
-            category=category,
-            status=status,
-            level=level,
-            faculty=faculty,
-            price=price,
-            file_path=file_path
-        )
-        db.session.add(item)
-        db.session.commit()
-        flash('Item uploaded successfully!', 'success')
-        return redirect(url_for('home'))
+        try:
+            # Ensure the upload directory exists
+            if not os.path.exists('static/uploads'):
+                os.makedirs('static/uploads')
+                
+            title = request.form['title']
+            author = request.form.get('author')
+            description = request.form['description']
+            category = request.form['category']
+            status = request.form['status']
+            level = request.form['level']
+            
+            # Determine faculty based on level
+            if level in ['11', '12']:
+                faculty = request.form.get('faculty-11-12')
+            elif level == 'bachelor':
+                faculty = request.form.get('faculty-bachelor')
+            else:
+                faculty = None
+            
+            price = request.form['price']
+            file = request.files['file']
+            if file:
+                filename = secure_filename(file.filename)
+                file_path = os.path.join('static/uploads', filename)
+                file.save(file_path)
+            else:
+                flash('No file selected', 'error')
+                return redirect(request.url)
+                
+            # Create a new item
+            item = Item(
+                title=title,
+                author=author,
+                description=description,
+                category=category,
+                status=status,
+                level=level,
+                faculty=faculty,
+                price=float(price),
+                file_path=filename  # Store just the filename
+            )
+            db.session.add(item)
+            db.session.commit()
+            flash('Item uploaded successfully!', 'success')
+            return redirect(url_for('home'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred while uploading: {str(e)}', 'error')
+            return redirect(request.url)
 
     return render_template('upload.html')
 
