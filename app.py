@@ -56,19 +56,23 @@ def categories():
 @app.route('/categories/<class_name>')
 def class_category(class_name):
     faculties = {
-        '8': ['Science', 'Math', 'English'],
-        '9': ['Science', 'Math', 'English'],
-        'SEE': ['Science', 'Math', 'English'],
-        '11': ['Science', 'Management', 'Humanities'],
-        '12': ['Science', 'Management', 'Humanities'],
-        'bachelor': ['Engineering', 'Medical', 'Arts']
+        '11': ['Science', 'Management', 'Humanities', 'Education', 'Law', 'Agriculture', 'Technical and Vocational Streams'],
+        '12': ['Science', 'Management', 'Humanities', 'Education', 'Law', 'Agriculture', 'Technical and Vocational Streams'],
+        'bachelor': [
+            'Management and Commerce', 'Science and Technology', 'Engineering', 'Medical and Health Sciences',
+            'Humanities and Social Sciences', 'Agriculture and Veterinary Sciences', 'Law', 'Fine Arts and Media'
+        ]
     }
-    return render_template('class_category.html', class_name=class_name, faculties=faculties.get(class_name, []))
+    if class_name in faculties:
+        return render_template('faculties.html', class_name=class_name, faculties=faculties[class_name])
+    else:
+        items = Item.query.filter_by(level=class_name).all()
+        return render_template('items.html', class_name=class_name, items=items)
 
 @app.route('/categories/<class_name>/<faculty>')
 def faculty_category(class_name, faculty):
-    # Implement your logic to filter items based on class_name and faculty
-    return render_template('faculty_category.html', class_name=class_name, faculty=faculty)
+    items = Item.query.filter_by(level=class_name, faculty=faculty).all()
+    return render_template('items.html', class_name=class_name, faculty=faculty, items=items)
 
 @app.route('/about')
 def about():
@@ -140,6 +144,8 @@ def upload():
         level = request.form['level']
         faculty = request.form.get('faculty')
         price = request.form['price']
+        contact_no = request.form['contact_no']
+        email = request.form['email']
         file = request.files['file']
 
         # Save the file
