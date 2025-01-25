@@ -52,6 +52,11 @@ def class_category(class_name):
     }
     return render_template('class_category.html', class_name=class_name, faculties=faculties.get(class_name, []))
 
+@app.route('/categories/<class_name>/<faculty>')
+def faculty_category(class_name, faculty):
+    # Implement your logic to filter items based on class_name and faculty
+    return render_template('faculty_category.html', class_name=class_name, faculty=faculty)
+
 @app.route('/about')
 def about():
     return render_template('about.html')
