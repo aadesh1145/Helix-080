@@ -29,26 +29,28 @@ class User(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    
-    
+
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
     # Implement your search logic here
     return render_template('search.html')
 
-# Login required decorator
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
 @app.route('/categories')
 def categories():
     return render_template('categories.html')
+
+@app.route('/categories/<class_name>')
+def class_category(class_name):
+    faculties = {
+        '8': ['Science', 'Math', 'English'],
+        '9': ['Science', 'Math', 'English'],
+        'SEE': ['Science', 'Math', 'English'],
+        '11': ['Science', 'Management', 'Humanities'],
+        '12': ['Science', 'Management', 'Humanities'],
+        'bachelor': ['Engineering', 'Medical', 'Arts']
+    }
+    return render_template('class_category.html', class_name=class_name, faculties=faculties.get(class_name, []))
 
 @app.route('/about')
 def about():
@@ -111,6 +113,13 @@ def home():
 @login_required
 def upload():
     return render_template('upload.html')
+
+@app.route('/profile')
+@login_required
+def profile():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    return render_template('profile.html', user=user)
 
 if __name__ == '__main__':
     with app.app_context():
