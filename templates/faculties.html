@@ -1,14 +1,11 @@
 {% extends "layout.html" %}
 
-{% block title %}Class {{ class_name }} - Book Mela{% endblock %}
+{% block title %}{{ class_name }} Faculties - Book Mela{% endblock %}
 
 {% block content %}
 <section class="bg-white py-8">
     <div class="container mx-auto px-4">
-        <h1 class="text-4xl font-bold text-gray-800 mb-6">Class{{ class_name }}</h1>
-        <p class="text-gray-600 mb-12">Select a faculty to explore items.</p>
-
-        <!-- Faculty Categories -->
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">{{ class_name|capitalize }} Faculties</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for faculty in faculties %}
                 <a href="{{ url_for('faculty_category', class_name=class_name, faculty=faculty) }}" class="bg-blue-100 p-6 rounded-lg shadow-lg text-center hover:bg-blue-200">
