@@ -80,27 +80,28 @@ def signup():
         
     return render_template('signup.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
         
         user = User.query.filter_by(email=email).first()
-
+        
         if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            session['fullname'] = user.fullname
-            flash('Successfully logged in!', 'success')
+            session['user_id'] = user.id  # Store user id in session
+            flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Invalid email or password', 'error')
-
-    return render_template('login.html')
+            flash('Invalid email or password. Please try again.', 'error')
+            return render_template("login.html")
+            
+    return render_template("login.html")
 
 @app.route('/logout')
 def logout():
-    session.clear()
+    session.pop('user_id', None)  # Remove user id from session
+    flash('You have been logged out', 'success')
     return redirect(url_for('home'))
 
 @app.route('/')

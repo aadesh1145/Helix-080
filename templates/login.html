@@ -5,7 +5,10 @@
 {% block content %}
 <div class="bg-sky-200 h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+
         <h2 class="text-2xl font-bold mb-6 text-center text-white font-mono tracking-wider bg-yellow-500 p-2 mx-auto w-fit shadow-md rounded-lg">LOGIN</h2>
+        
+        <!-- ...existing form code... -->
         <form class="space-y-6" method="POST" action="{{ url_for('login') }}">
     <div>
         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
@@ -58,6 +61,16 @@
                     Forgot password?
                 </a>
             </div>
+            <!-- Flash Messages - Add Here -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
             
             <button
                 type="submit"
