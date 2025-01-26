@@ -26,35 +26,39 @@
                     <button type="submit" class="ml-2 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 active:bg-yellow-700 disabled:bg-gray-400">Search</button>
                 </form>
             </div>
-            <ul class="hidden md:flex space-x-6">
+            <div class="md:hidden">
+                <button id="menu-button" class="focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+            <ul id="menu" class="hidden md:flex space-x-6">
                 <li><a href="{{ url_for('home') }}" class="{% if request.path == url_for('home') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Home</a></li>
                 <li><a href="{{ url_for('categories') }}" class="{% if request.path == url_for('categories') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Categories</a></li>
                 <li><a href="{{ url_for('upload') }}" class="{% if request.path == url_for('upload') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Upload</a></li>
                 <li><a href="{{ url_for('about') }}" class="{% if request.path == url_for('about') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">About Us</a></li>
-                {% if 'user_id' in session %}
+                {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('profile') }}" class="{% if request.path == url_for('profile') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Profile</a></li>
                     <li><a href="{{ url_for('logout') }}" class="hover:text-yellow-500 hover:underline">Logout</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('login') }}" class="{% if request.path == url_for('login') %}text-yellow-500 bg-blue-800 rounded px-2 py-1{% else %}hover:text-yellow-500 hover:underline{% endif %}">Login/Signup</a></li>
+                    <li><a href="{{ url_for('login') }}" class="hover:text-yellow-500 hover:underline">Login/Sign Up</a></li>
                 {% endif %}
             </ul>
-            <button class="md:hidden text-yellow-500" id="menu-button">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
         </div>
-        <div id="menu" class="hidden md:hidden bg-blue-900">
-            <a href="{{ url_for('home') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Home</a>
-            <a href="{{ url_for('categories') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Categories</a>
-            <a href="{{ url_for('upload') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Upload</a>
-            <a href="{{ url_for('about') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">About Us</a>
-            {% if 'user_id' in session %}
-                <a href="{{ url_for('profile') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Profile</a>
-                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-white hover:text-yellow-500 hover:underline">Logout</a>
-            {% else %}
-                <a href="{{ url_for('login') }}" class="block px-4 py-2 text-white bg-blue-800 hover:bg-yellow-600 rounded-lg">Login/Signup</a>
-            {% endif %}
+        <div id="mobile-menu" class="hidden md:hidden">
+            <ul class="space-y-4 px-4 py-6">
+                <li><a href="{{ url_for('home') }}" class="block text-white hover:text-yellow-500">Home</a></li>
+                <li><a href="{{ url_for('categories') }}" class="block text-white hover:text-yellow-500">Categories</a></li>
+                <li><a href="{{ url_for('upload') }}" class="block text-white hover:text-yellow-500">Upload</a></li>
+                <li><a href="{{ url_for('about') }}" class="block text-white hover:text-yellow-500">About Us</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('profile') }}" class="block text-white hover:text-yellow-500">Profile</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="block text-white hover:text-yellow-500">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}" class="block text-white hover:text-yellow-500">Login/Sign Up</a></li>
+                {% endif %}
+            </ul>
         </div>
     </nav>
 
@@ -84,5 +88,12 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        document.getElementById('menu-button').addEventListener('click', function() {
+            var menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

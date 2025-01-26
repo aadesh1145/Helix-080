@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-6">Buy {{ item.title }}</h1>
+    <p class="text-xl mb-4"><strong>Price:</strong> NPR {{ item.price }}</p>
+    <form method="POST">
+        <div class="mb-4">
+            <label for="payment_method" class="block text-gray-700">Payment Method <span class="text-red-500">*</span></label>
+            <select id="payment_method" name="payment_method" class="w-full px-4 py-2 border rounded" required onchange="toggleTransactionID()">
+                <option value="" disabled selected>Select a payment method</option>
+                <option value="esewa">eSewa</option>
+                <option value="khalti">Khalti</option>
+                <option value="cod">Cash on Delivery</option>
+            </select>
+        </div>
+        <div id="qr_section" class="mb-4 hidden">
+            <label class="block text-gray-700">Scan QR Code</label>
+            <img id="qr_code_image" src="" alt="QR Code" class="w-32 h-32">
+        </div>
+        <div id="transaction_id_section" class="mb-4 hidden">
+            <label for="transaction_id" class="block text-gray-700">Transaction ID <span class="text-red-500">*</span></label>
+            <input type="text" id="transaction_id" name="transaction_id" class="w-full px-4 py-2 border rounded">
+        </div>
+        <div class="mb-4">
+            <label for="delivery_address" class="block text-gray-700">Delivery Address <span class="text-red-500">*</span></label>
+            <textarea id="delivery_address" name="delivery_address" class="w-full px-4 py-2 border rounded" required></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="phone_number" class="block text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+            <input type="text" id="phone_number" name="phone_number" class="w-full px-4 py-2 border rounded" required>
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-gray-700">Email <span class="text-red-500">*</span></label>
+            <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded" required>
+        </div>
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Buy Now</button>
+    </form>
+</div>
+
+<script>
+function toggleTransactionID() {
+    const paymentMethod = document.getElementById('payment_method').value;
+    const transactionIDSection = document.getElementById('transaction_id_section');
+    const qrSection = document.getElementById('qr_section');
+    const qrCodeImage = document.getElementById('qr_code_image');
+    
+    if (paymentMethod === 'esewa' || paymentMethod === 'khalti') {
+        qrSection.classList.remove('hidden');
+        transactionIDSection.classList.remove('hidden');
+        if (paymentMethod === 'esewa') {
+            qrCodeImage.src = '/static/images/esewaqr.jpeg';
+        } else if (paymentMethod === 'khalti') {
+            qrCodeImage.src = '/static/images/khaltiqr.jpeg';
+        }
+    } else {
+        qrSection.classList.add('hidden');
+        transactionIDSection.classList.add('hidden');
+        qrCodeImage.src = '';
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit Item{% endblock %}
+
+{% block content %}
+<div class="bg-white py-8">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Edit Item</h1>
+        <form action="{{ url_for('edit_item', item_id=item.id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+                    Title <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="title"
+                    name="title"
+                    value="{{ item.title }}"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="author">
+                    Author (optional)
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="author"
+                    name="author"
+                    value="{{ item.author }}"
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    id="description"
+                    name="description"
+                    required
+                >{{ item.description }}</textarea>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+                    Category <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="category"
+                    name="category"
+                    value="{{ item.category }}"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="status">
+                    Status <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="status"
+                    name="status"
+                    value="{{ item.status }}"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="level">
+                    Level <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="level"
+                    name="level"
+                    value="{{ item.level }}"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="contact_no">
+                    Contact No <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="text"
+                    id="contact_no"
+                    name="contact_no"
+                    value="{{ item.contact_no }}"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                    Email <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ item.email }}"
+                    required
+                />
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+                    Price <span class="text-red-500">*</span>
+                </label>
+                <input
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    type="number"
+                    id="price"
+                    name="price"
+                    value="{{ item.price }}"
+                    required
+                />
+            </div>
+            <div>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
